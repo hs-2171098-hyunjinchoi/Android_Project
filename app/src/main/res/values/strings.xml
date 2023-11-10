@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">android_Project</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_signup">SIGN UP</string>
+    <string name="btn_signin">SIGN IN</string>
+
+
 </resources>
