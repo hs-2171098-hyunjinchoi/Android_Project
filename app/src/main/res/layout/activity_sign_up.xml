@@ -144,7 +144,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewDateOfBirthLabel" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnSignup"
+        android:id="@+id/btnCreate"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="48dp"

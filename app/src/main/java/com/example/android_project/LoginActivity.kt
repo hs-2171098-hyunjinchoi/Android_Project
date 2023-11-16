@@ -15,15 +15,18 @@ class LoginActivity : AppCompatActivity() {
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.signin.setOnClickListener {
+        // If you click signin button, you'll try signin
+        binding.btnSignin.setOnClickListener {
             val userEmail = binding.userEmail.text.toString()
             val userPassword = binding.userPassword.text.toString()
             doSignIn(userEmail, userPassword)
         }
-        binding.signup.setOnClickListener {
+        // If you click signup button, LoginActivity switches to SignUpActivity
+        binding.btnSignup.setOnClickListener {
             startActivity(
-                Intent()
+                Intent(this, SignUpActivity::class.java)
             )
+            finish()
         }
     }
     private fun doSignIn(userEmail: String, userPassword: String){
