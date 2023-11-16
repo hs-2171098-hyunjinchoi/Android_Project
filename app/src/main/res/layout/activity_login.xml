@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="#faedcd">
 
     <EditText
         android:id="@+id/user_email"
@@ -26,18 +27,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="276dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:hint="@string/hint_password"
         android:imeOptions="actionDone"
-        android:inputType="textPassword"
+        android:inputType="textPassword|text"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/user_email" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/signin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,7 +48,10 @@
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="288dp"
         android:enabled="true"
-        android:text="@string/btn_signin"
+        android:text="@string/signin"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:background="@drawable/brown_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.184"
@@ -55,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@+id/user_password"
         app:layout_constraintVertical_bias="1.0" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,7 +67,10 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="288dp"
-        android:text="@string/btn_signup"
+        android:text="@string/signup"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:background="@drawable/brown_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.417"
