@@ -20,6 +20,11 @@ class LoginActivity : AppCompatActivity() {
             val userPassword = binding.userPassword.text.toString()
             doSignIn(userEmail, userPassword)
         }
+        binding.signup.setOnClickListener {
+            startActivity(
+                Intent()
+            )
+        }
     }
     private fun doSignIn(userEmail: String, userPassword: String){
         Firebase.auth.signInWithEmailAndPassword(userEmail, userPassword)
