@@ -40,6 +40,9 @@ android {
 }
 
 dependencies {
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("com.google.android.material:material:1.10.0")
+
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth-ktx")
