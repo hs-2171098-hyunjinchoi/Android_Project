@@ -25,6 +25,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".ListActivity"
+            android:label="@string/app_name">
+        </activity>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="firebase-messaging"/>
