@@ -3,6 +3,7 @@ package com.example.android_project.navigation
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_project.R
 import com.example.android_project.product_data
 import com.google.firebase.firestore.FirebaseFirestore
+
+import com.google.firebase.firestore.ListenerRegistration
+
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -22,6 +26,7 @@ class HomeFragment : Fragment(){
     private lateinit var recyclerViewAdapter : RecyclerViewAdapter
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemsCollectionRef = db.collection("product")
+    private var listener : ListenerRegistration? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,10 +47,11 @@ class HomeFragment : Fragment(){
         var productList : ArrayList<product_data> = arrayListOf()
 
         init{
-            itemsCollectionRef
+            listener = itemsCollectionRef
                 .addSnapshotListener{querySnapshot, firebaseFirestoreException ->
 //                 ArrayList 비워줌
 //                productList.clear()
+            if(querySnapshot!=null){ // null 체크 추가
 
                 for (snapshot in querySnapshot!!.documents) {
                     val title = snapshot.getString("title")
@@ -57,6 +63,9 @@ class HomeFragment : Fragment(){
                     productList.add(item!!)
                 }
                 notifyDataSetChanged()
+            }else{
+                Log.e("HomeFragment", "querySnapshot null")
+            }
             }
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -67,7 +76,8 @@ class HomeFragment : Fragment(){
             var productName : TextView = view.findViewById(R.id.productName)
             var productPrice : TextView = view.findViewById(R.id.productPrice)
             var productStatus : TextView = view.findViewById(R.id.productStatus)
-            var statusCheck : CheckBox = view.findViewById(R.id.statusCheck)
+            // statusCheck 사용하실 때 주석 푸시면 됩니다.
+//            var statusCheck : CheckBox = view.findViewById(R.id.statusCheck)
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -103,6 +113,11 @@ class HomeFragment : Fragment(){
             return productList.size
             // 리사이클러뷰의 아이템 총 개수 반환
         }
+    }
+    // 종료할 때 리스너 해제해야 함 (데이터 변경 감지 종료)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        listener?.remove()
     }
 }
 

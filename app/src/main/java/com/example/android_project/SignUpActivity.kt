@@ -1,10 +1,13 @@
 package com.example.android_project
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.example.android_project.databinding.ActivityLoginBinding
 import com.example.android_project.databinding.ActivitySignUpBinding
 import com.google.firebase.Firebase
@@ -27,6 +30,16 @@ class SignUpActivity : AppCompatActivity() {
                 Toast.makeText(this, "모든 항목을 입력하세요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            if(userDateOfBirth.length!=8){
+                binding.edtDateOfBirth.backgroundTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
+                Toast.makeText(this,"올바른 생년월일 8자리를 입력하세요", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            else{
+                binding.edtDateOfBirth.backgroundTintList = null
+            }
             //TODO: 추후 계정정보 파이어베이스에 저장하는 코드 추가해야 함.
 
             doSignUp(userEmail, userPassword)
@@ -39,8 +52,8 @@ class SignUpActivity : AppCompatActivity() {
             .addOnCompleteListener(this){
                 // When sign up is successful
                 if(it.isSuccessful){
-                    startActivity( // 이 부분도 추후에 '판매글 Activity'로 수정 예정
-                        Intent(this, MainActivity::class.java)
+                    startActivity(
+                        Intent(this, ListActivity::class.java)
                     )
                     finish()
                 }

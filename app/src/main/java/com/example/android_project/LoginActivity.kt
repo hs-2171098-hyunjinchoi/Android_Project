@@ -26,7 +26,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(
                 Intent(this, SignUpActivity::class.java)
             )
-            finish()
         }
     }
     private fun doSignIn(userEmail: String, userPassword: String){
