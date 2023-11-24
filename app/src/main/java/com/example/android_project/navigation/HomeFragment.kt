@@ -27,6 +27,7 @@ class HomeFragment : Fragment(){
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemsCollectionRef = db.collection("product")
     private var listener : ListenerRegistration? = null
+    private lateinit var statusCheckBox: CheckBox
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,10 +41,18 @@ class HomeFragment : Fragment(){
         recyclerViewAdapter = RecyclerViewAdapter()
         recyclerView.adapter = recyclerViewAdapter
 
+        statusCheckBox = view.findViewById(R.id.statusCheck)
+        // 체크박스 상태 변경 리스너 설정
+        statusCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            recyclerViewAdapter.filterProductList(isChecked)
+        }
+
         return view;
     }
+    // xml파일을 inflate하여 ViewHolder를 생성
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        // xml파일을 inflate하여 ViewHolder를 생성
+
+        private var originalList: ArrayList<product_data> = arrayListOf()
         var productList : ArrayList<product_data> = arrayListOf()
 
         init{
@@ -62,6 +71,7 @@ class HomeFragment : Fragment(){
                     val item = product_data(title, price, productStatus)
                     productList.add(item!!)
                 }
+                originalList = productList
                 notifyDataSetChanged()
             }else{
                 Log.e("HomeFragment", "querySnapshot null")
@@ -76,8 +86,6 @@ class HomeFragment : Fragment(){
             var productName : TextView = view.findViewById(R.id.productName)
             var productPrice : TextView = view.findViewById(R.id.productPrice)
             var productStatus : TextView = view.findViewById(R.id.productStatus)
-            // statusCheck 사용하실 때 주석 푸시면 됩니다.
-//            var statusCheck : CheckBox = view.findViewById(R.id.statusCheck)
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -107,6 +115,14 @@ class HomeFragment : Fragment(){
             }
 
 
+        }
+        fun filterProductList(showActive: Boolean) {
+            productList = if (showActive) {
+                ArrayList(originalList.filter { it.productStatus == true })
+            } else {
+                ArrayList(originalList)
+            }
+            notifyDataSetChanged()
         }
 
         override fun getItemCount(): Int {
