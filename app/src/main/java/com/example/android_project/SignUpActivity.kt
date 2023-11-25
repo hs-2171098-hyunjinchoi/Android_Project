@@ -12,56 +12,93 @@ import com.example.android_project.databinding.ActivityLoginBinding
 import com.example.android_project.databinding.ActivitySignUpBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 
 class SignUpActivity : AppCompatActivity() {
+    private val db: FirebaseFirestore = Firebase.firestore
+    private val usersCollectionRef = db.collection("users")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnCreate.setOnClickListener{
+        binding.btnCreate.setOnClickListener {
             val userEmail = binding.edtEmail.text.toString()
             val userPassword = binding.edtPassword.text.toString()
             val userName = binding.edtName.text.toString()
             val userDateOfBirth = binding.edtDateOfBirth.text.toString()
 
             // If any of edt items are empty, you can't proceed
-            if(userEmail.isEmpty()||userPassword.isEmpty()||userName.isEmpty()||userDateOfBirth.isEmpty()){
+            if (userEmail.isEmpty() || userPassword.isEmpty() || userName.isEmpty() || userDateOfBirth.isEmpty()) {
                 Toast.makeText(this, "모든 항목을 입력하세요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if(userDateOfBirth.length!=8){
+            if (userDateOfBirth.length != 8) {
                 binding.edtDateOfBirth.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
-                Toast.makeText(this,"올바른 생년월일 8자리를 입력하세요", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "올바른 생년월일 8자리를 입력하세요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
-            }
-            else{
+            } else {
                 binding.edtDateOfBirth.backgroundTintList = null
             }
-            //TODO: 추후 계정정보 파이어베이스에 저장하는 코드 추가해야 함.
-
-            doSignUp(userEmail, userPassword)
+            doSignUp(userEmail, userPassword, userName, userDateOfBirth)
         }
 
 
     }
-    private fun doSignUp(userEmail: String, password: String){
+
+    private fun doSignUp(
+        userEmail: String,
+        password: String,
+        userName: String,
+        userDateOfBirth: String
+    ) {
+
         Firebase.auth.createUserWithEmailAndPassword(userEmail, password)
-            .addOnCompleteListener(this){
+            .addOnCompleteListener(this) {
                 // When sign up is successful
-                if(it.isSuccessful){
+                if (it.isSuccessful) {
+                    val currentUser = Firebase.auth.currentUser
+                    val uid = currentUser?.uid
+                    if(uid!=null){
+                        addAccountInfo(userEmail, userName, userDateOfBirth, uid)
+                    }
                     startActivity(
                         Intent(this, ListActivity::class.java)
                     )
                     finish()
                 }
                 // When sign up fails
-                else{ // Password should be at least 6 characters
+                else { // Password should be at least 6 characters
                     Log.w("SignUpActivity", "signUpWithEmail", it.exception)
                     Toast.makeText(this, "중복된 이메일 계정입니다.", Toast.LENGTH_SHORT).show()
                 }
             }
+
+    }
+
+    private fun addAccountInfo(
+        userEmail: String,
+        userName: String,
+        userDateOfBirth: String,
+        uid: String?
+    ) {
+        if (uid != null) {
+
+            // 파이어스토어에 계정정보 추가
+            val userInfo = hashMapOf(
+                "email" to userEmail,
+                "name" to userName,
+                "birth" to userDateOfBirth
+            )
+            usersCollectionRef.document(uid).set(userInfo)
+                .addOnSuccessListener {
+                }
+                .addOnFailureListener {
+                    Log.e("컬렉션 저장", "저장 실패", it)
+                }
+        }
     }
 }

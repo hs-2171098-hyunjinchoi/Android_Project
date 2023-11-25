@@ -10,14 +10,17 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_project.R
 import com.example.android_project.product_data
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.firestore
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -27,6 +30,7 @@ class HomeFragment : Fragment(){
     private lateinit var recyclerViewAdapter : RecyclerViewAdapter
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemsCollectionRef = db.collection("product")
+    private val usersCollectionRef = db.collection("users")
     private var listener : ListenerRegistration? = null
     private lateinit var statusCheckBox: CheckBox
     override fun onCreateView(
@@ -48,6 +52,28 @@ class HomeFragment : Fragment(){
             recyclerViewAdapter.filterProductList(isChecked)
         }
 
+        val currentUser = Firebase.auth.currentUser
+        val uid = currentUser?.uid
+        var userName : String? = null
+        if(uid!=null){
+            usersCollectionRef.document(uid).get() // document 식별은 uid로 가능
+                .addOnSuccessListener {
+                    if(it!=null && it.exists()){
+                        // 파이어스토어에서 유저정보 가져오기
+                        userName = it.getString("name")
+
+                        // UI 업데이트
+                        view.findViewById<TextView>(R.id.user_name).text = userName
+                    }else{
+                        Log.d("HomeFragment", "user의 document가 존재하지 않음")
+                    }
+                }
+                .addOnFailureListener{
+
+                }
+        }else{
+            Log.d("HomeFragment", "로그인 상태가 아님")
+        }
         val button: FloatingActionButton = view.findViewById(R.id.floatingActionButton)
         button.setOnClickListener{
             val fragmentManager = activity?.supportFragmentManager
