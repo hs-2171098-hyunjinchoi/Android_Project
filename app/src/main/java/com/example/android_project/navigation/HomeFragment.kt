@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_project.R
 import com.example.android_project.product_data
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 
 import com.google.firebase.firestore.ListenerRegistration
@@ -47,6 +48,18 @@ class HomeFragment : Fragment(){
             recyclerViewAdapter.filterProductList(isChecked)
         }
 
+        val button: FloatingActionButton = view.findViewById(R.id.floatingActionButton)
+        button.setOnClickListener{
+            val fragmentManager = activity?.supportFragmentManager
+            val itemDetailsFragment = MakingItemFragment()
+
+
+            fragmentManager?.beginTransaction()
+                ?.replace(R.id.fragmentContainer, itemDetailsFragment)
+                ?.addToBackStack(null)
+                ?.commit()
+        }
+
         return view;
     }
     // xml파일을 inflate하여 ViewHolder를 생성
@@ -66,9 +79,11 @@ class HomeFragment : Fragment(){
                     val title = snapshot.getString("title")
                     val price = snapshot.get("price")?.toString()
                     val productStatus: Boolean = snapshot.get("saleStatus") as? Boolean ?: false
+                    val seller = snapshot.getString("seller")
+                    val detail = snapshot.getString("detail")
 
 //                    var item = snapshot.toObject(product_data::class.java)
-                    val item = product_data(title, price, productStatus)
+                    val item = product_data(title, price, productStatus, detail, seller)
                     productList.add(item!!)
                 }
                 originalList = productList
@@ -86,6 +101,31 @@ class HomeFragment : Fragment(){
             var productName : TextView = view.findViewById(R.id.productName)
             var productPrice : TextView = view.findViewById(R.id.productPrice)
             var productStatus : TextView = view.findViewById(R.id.productStatus)
+
+            init {
+                itemView.setOnClickListener{
+                    val clickedPosition = bindingAdapterPosition
+                    if(clickedPosition != RecyclerView.NO_POSITION){
+                        val clickedItem = productList[clickedPosition]
+
+                        val bundle = Bundle().apply {
+                            putString("productName", clickedItem.title)
+                            putString("productPrice", clickedItem.price)
+                            putString("status", clickedItem.productStatus.toString())
+                            putString("productDetail", clickedItem.detail)
+                            putString("seller", clickedItem.seller)
+                        }
+                        val fragmentManager = activity?.supportFragmentManager
+                        val itemDetailsFragment = ItemDetailsFragment()
+                        itemDetailsFragment.arguments = bundle
+
+                        fragmentManager?.beginTransaction()
+                            ?.replace(R.id.fragmentContainer, itemDetailsFragment)
+                            ?.addToBackStack(null)
+                            ?.commit()
+                    }
+                }
+            }
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
