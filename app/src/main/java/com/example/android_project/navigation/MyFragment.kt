@@ -31,7 +31,6 @@ class MyFragment : Fragment(){
         val rootView = binding.root
 
         loadUserInfo()
-
         binding.btnLogout.setOnClickListener{
             logout()
         }
@@ -59,7 +58,6 @@ class MyFragment : Fragment(){
                         userName = it.getString("name")
                         userEmail = it.getString("email")
                         userBirth = it.getString("birth")
-                        
                         // UI 업데이트
                         binding.userNameLabel.text = "${binding.userNameLabel.text} $userName"
                         binding.userEmailLabel.text = "${binding.userEmailLabel.text} $userEmail"
