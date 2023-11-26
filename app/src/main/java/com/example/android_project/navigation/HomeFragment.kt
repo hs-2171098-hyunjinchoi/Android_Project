@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_project.R
@@ -20,12 +19,14 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.firestore
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class HomeFragment : Fragment(){
+    private val currentUser = Firebase.auth.currentUser
+    private val uid = currentUser?.uid
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter : RecyclerViewAdapter
     private val db: FirebaseFirestore = Firebase.firestore
@@ -52,8 +53,8 @@ class HomeFragment : Fragment(){
             recyclerViewAdapter.filterProductList(isChecked)
         }
 
-        val currentUser = Firebase.auth.currentUser
-        val uid = currentUser?.uid
+//        val currentUser = Firebase.auth.currentUser
+//        val uid = currentUser?.uid
         var userName : String? = null
         if(uid!=null){
             usersCollectionRef.document(uid).get() // document 식별은 uid로 가능
@@ -61,7 +62,6 @@ class HomeFragment : Fragment(){
                     if(it!=null && it.exists()){
                         // 파이어스토어에서 유저정보 가져오기
                         userName = it.getString("name")
-
                         // UI 업데이트
                         view.findViewById<TextView>(R.id.user_name).text = userName
                     }else{
@@ -107,9 +107,10 @@ class HomeFragment : Fragment(){
                     val productStatus: Boolean = snapshot.get("saleStatus") as? Boolean ?: false
                     val seller = snapshot.getString("seller")
                     val detail = snapshot.getString("detail")
+                    val documentId = snapshot.id
 
 //                    var item = snapshot.toObject(product_data::class.java)
-                    val item = product_data(title, price, productStatus, detail, seller)
+                    val item = product_data(title, price, productStatus, detail, seller, documentId)
                     productList.add(item!!)
                 }
                 originalList = productList
@@ -140,15 +141,33 @@ class HomeFragment : Fragment(){
                             putString("status", clickedItem.productStatus.toString())
                             putString("productDetail", clickedItem.detail)
                             putString("seller", clickedItem.seller)
+                            putString("documentId", clickedItem.documentId)
                         }
                         val fragmentManager = activity?.supportFragmentManager
+
+                        // 수정 불가 프래그먼트
                         val itemDetailsFragment = ItemDetailsFragment()
                         itemDetailsFragment.arguments = bundle
 
-                        fragmentManager?.beginTransaction()
-                            ?.replace(R.id.fragmentContainer, itemDetailsFragment)
-                            ?.addToBackStack(null)
-                            ?.commit()
+                        // 수정 가능 프래그먼트
+                        val updateItemFragment = UpdateItemFragment()
+                        updateItemFragment.arguments = bundle
+
+                        // 현재 로그인한 유저가 자신의 글을 클릭하면 수정 가능한 레이아웃으로,
+                        // 다른 사람의 글을 클릭하면 수정 불가한 레이아웃으로 전환
+                        if(currentUser?.email == clickedItem.seller) {
+                            fragmentManager?.beginTransaction()
+                                ?.replace(R.id.fragmentContainer, updateItemFragment)
+                                ?.addToBackStack(null)
+                                ?.commit()
+                        }
+                        else {
+                            fragmentManager?.beginTransaction()
+                                ?.replace(R.id.fragmentContainer, itemDetailsFragment)
+                                ?.addToBackStack(null)
+                                ?.commit()
+                        }
+
                     }
                 }
             }
@@ -157,19 +176,20 @@ class HomeFragment : Fragment(){
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewHolder = holder as ViewHolder
 
+            // 게시물 제목 표시
             viewHolder.productName.text = productList[position].title
             viewHolder.productName.setTypeface(null, Typeface.BOLD)
 
+            // 상품 가격 표시
             viewHolder.productPrice.text = "\u20A9 " + productList[position].price
 
+            // 판매 상태(판매 완료, 판매중)에 따라 글자 색 변경
             if(productList[position].productStatus == true) {
                 viewHolder.productStatus.text = "판매 중"
-                // 글자색을 초록색으로
                 viewHolder.productStatus.setTextColor(Color.GREEN)
             }
             else {
                 viewHolder.productStatus.text = "판매 완료"
-                // 글자색을 빨간색으로
                 viewHolder.productStatus.setTextColor(Color.RED)
             }
 
@@ -179,7 +199,6 @@ class HomeFragment : Fragment(){
             } else {
                 viewHolder.itemView.setBackgroundColor(Color.parseColor("#edecf2"))
             }
-
 
         }
         fun filterProductList(showActive: Boolean) {

@@ -41,7 +41,7 @@ class MakingItemFragment : Fragment(){
             sellerEditText.setText("?")
         }
 
-        val saveButton: Button = view.findViewById(R.id.buttonSave)
+        val saveButton: Button = view.findViewById(R.id.createButton)
         saveButton.setOnClickListener {
             val title = titleEditText.text.toString()
             val price = priceEditText.text.toString()

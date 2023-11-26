@@ -65,6 +65,20 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/editCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="'판매중' (해제하면 '판매 완료' 표시)"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
     <EditText
         android:id="@+id/productDetail"
         android:gravity="top"
@@ -73,12 +87,13 @@
         android:layout_marginTop="10dp"
         android:layout_weight="1"
         android:hint="상품 설명"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        />
 
     <Button
-        android:id="@+id/createButton"
+        android:id="@+id/updateButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="글 등록하기" />
+        android:text="글 수정하기" />
 
 </LinearLayout>

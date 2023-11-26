@@ -33,7 +33,7 @@ class ItemDetailsFragment: Fragment() {
         }
 
         view.findViewById<TextView>(R.id.productName).text = productName
-        view.findViewById<TextView>(R.id.productPrice).text = "가격 : $productPrice 원"
+        view.findViewById<TextView>(R.id.productPrice).text = "가격 : $productPrice"
         val statusTextView = view.findViewById<TextView>(R.id.status)
         statusTextView.text = statustext
         statusTextView.setTextColor(if(status.toBoolean())  Color.GREEN else Color.RED)
