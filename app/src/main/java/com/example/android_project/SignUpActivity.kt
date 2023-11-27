@@ -66,7 +66,7 @@ class SignUpActivity : AppCompatActivity() {
                         addAccountInfo(userEmail, userName, userDateOfBirth, uid)
                     }
                     startActivity(
-                        Intent(this, ListActivity::class.java)
+                        Intent(this, MainActivity::class.java)
                     )
                     finish()
                 }

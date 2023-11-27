@@ -43,7 +43,7 @@ class ChatActivity : AppCompatActivity() {
         if (currentUser != null) {
             val chatMessage = Message(auth.currentUser?.uid, receiver,message,System.currentTimeMillis())
             firestore.collection("chat").add(chatMessage)
-            val intent = Intent(this, ListActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }
