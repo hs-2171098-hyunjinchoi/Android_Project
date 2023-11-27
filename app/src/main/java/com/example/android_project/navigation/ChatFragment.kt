@@ -1,7 +1,6 @@
 package com.example.android_project.navigation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,15 +8,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android_project.ChatActivity.Companion.TAG
 import com.example.android_project.R
-import com.example.android_project.product_data
 import com.google.firebase.firestore.firestore
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import com.google.firebase.firestore.auth.User
-import com.google.firebase.firestore.toObject
-import kotlin.reflect.typeOf
 
 data class Message(val sender:String?=null,val receiver: String?= null, val body:String? =null, val timestamp: Long = 0)
 data class MyUser(val email:String?=null, val name:String?=null,val birth: String?=null)
@@ -50,6 +44,7 @@ class ChatFragment : Fragment() {
                             return@addSnapshotListener
                         }
                         if(snapshot != null){
+                            messageList.clear()
                             for (doc in snapshot!!.documents) {
                                 val body = doc.getString("body")
                                 val receiver = doc.getString("receiver")
