@@ -14,6 +14,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class SignUpActivity : AppCompatActivity() {
     private val db: FirebaseFirestore = Firebase.firestore
@@ -35,7 +38,7 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             // 생년월일 8자리 강제
-            if (userDateOfBirth.length != 8) {
+            if (!isValidDateOfBirth(userDateOfBirth)) {
                 binding.edtDateOfBirth.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
                 Toast.makeText(this, "올바른 생년월일 8자리를 입력하세요", Toast.LENGTH_SHORT).show()
@@ -57,7 +60,26 @@ class SignUpActivity : AppCompatActivity() {
 
 
     }
-
+    private fun isValidDateOfBirth(dateOfBirth: String): Boolean{
+        if(dateOfBirth.length!=8){
+            return false
+        }
+        val dateFormat = SimpleDateFormat("yyyyMMdd")
+        dateFormat.isLenient = false // 날짜형식 엄격 제한
+        try{
+            // dateOfBirth를 Date 객체로 파싱
+            val parsedDate = dateFormat.parse(dateOfBirth)
+            // 현재 날짜, 시간 Date객체
+            val currentDate = Date()
+            // 생년월일이 현재 날짜 이전이면
+            if(parsedDate != null && parsedDate.before(currentDate)){
+                return true
+            }
+        }catch (e: ParseException){
+            e.printStackTrace()
+        }
+        return false
+    }
     private fun doSignUp(
         userEmail: String,
         password: String,
@@ -80,7 +102,7 @@ class SignUpActivity : AppCompatActivity() {
                     finish()
                 }
                 // When sign up fails
-                else { // Password should be at least 6 characters
+                else {
                     Log.w("SignUpActivity", "signUpWithEmail", it.exception)
                     Toast.makeText(this, "중복된 이메일 계정입니다.", Toast.LENGTH_SHORT).show()
                 }
