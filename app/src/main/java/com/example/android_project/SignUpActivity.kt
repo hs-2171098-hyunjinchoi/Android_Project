@@ -106,7 +106,7 @@ class SignUpActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                 }
                 .addOnFailureListener {
-                    Log.e("컬렉션 저장", "저장 실패", it)
+                    Log.e("컬렉션", "저장 실패", it)
                 }
         }
     }
