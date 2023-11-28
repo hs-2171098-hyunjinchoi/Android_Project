@@ -34,7 +34,7 @@ class SignUpActivity : AppCompatActivity() {
                 Toast.makeText(this, "모든 항목을 입력하세요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
+            // 생년월일 8자리 강제
             if (userDateOfBirth.length != 8) {
                 binding.edtDateOfBirth.backgroundTintList =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
@@ -42,6 +42,15 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             } else {
                 binding.edtDateOfBirth.backgroundTintList = null
+            }
+            // 패스워드 6자리 이상
+            if (userPassword.length < 6) {
+                binding.edtPassword.backgroundTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red))
+                Toast.makeText(this, "비밀번호를 6자리 이상 입력하세요", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            } else {
+                binding.edtPassword.backgroundTintList = null
             }
             doSignUp(userEmail, userPassword, userName, userDateOfBirth)
         }
