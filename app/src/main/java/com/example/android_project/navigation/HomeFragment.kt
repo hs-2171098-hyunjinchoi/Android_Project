@@ -98,7 +98,7 @@ class HomeFragment : Fragment(){
             listener = itemsCollectionRef
                 .addSnapshotListener{querySnapshot, firebaseFirestoreException ->
 //                 ArrayList 비워줌
-//                productList.clear()
+            productList.clear()
             if(querySnapshot!=null){ // null 체크 추가
 
                 for (snapshot in querySnapshot!!.documents) {
