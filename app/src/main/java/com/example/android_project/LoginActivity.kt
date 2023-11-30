@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener{
                 // If you successfully sign-in, you return to MainActivity
                 if(it.isSuccessful){
-                    startActivity( // 추후에 판매글 보기 액티비티 생성하면 해당 액티비티로 변경할 부분입니다.
+                    startActivity(
                         Intent(this, MainActivity::class.java)
                     )
                     finish()

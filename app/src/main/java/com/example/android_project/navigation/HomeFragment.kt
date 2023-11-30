@@ -17,7 +17,8 @@ import com.example.android_project.product_data
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.firestore.ListenerRegistration
 
 import com.google.firebase.firestore.ktx.firestore
@@ -40,7 +41,6 @@ class HomeFragment : Fragment(){
     ) : View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 //        firestore = FirebaseFirestore.getInstance()
-
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -88,6 +88,13 @@ class HomeFragment : Fragment(){
 
         return view;
     }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        // 프래그먼트 돌아오면 false로 해제 처리
+        statusCheckBox.isChecked = false
+    }
+
     // xml파일을 inflate하여 ViewHolder를 생성
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -221,4 +228,3 @@ class HomeFragment : Fragment(){
         listener?.remove()
     }
 }
-
