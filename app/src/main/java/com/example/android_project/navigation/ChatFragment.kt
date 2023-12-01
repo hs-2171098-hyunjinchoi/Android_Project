@@ -78,9 +78,6 @@ class MessageAdapter(private val messageList: List<Message>) : RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-        val layoutParams = holder.itemView.layoutParams
-        layoutParams.height = 100
-        holder.itemView.requestLayout()
         val message = messageList[position]
         Firebase.firestore.collection("users").document(message.sender.toString()).get().addOnCompleteListener {
             if(it.isSuccessful){
