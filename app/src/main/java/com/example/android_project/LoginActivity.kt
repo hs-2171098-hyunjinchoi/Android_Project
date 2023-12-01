@@ -19,6 +19,10 @@ class LoginActivity : AppCompatActivity() {
         binding.btnSignin.setOnClickListener {
             val userEmail = binding.userEmail.text.toString()
             val userPassword = binding.userPassword.text.toString()
+            if (userEmail.isEmpty() || userPassword.isEmpty()) {
+                Toast.makeText(this, "모든 항목을 입력하세요", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             doSignIn(userEmail, userPassword)
         }
         // If you click signup button, LoginActivity switches to SignUpActivity
