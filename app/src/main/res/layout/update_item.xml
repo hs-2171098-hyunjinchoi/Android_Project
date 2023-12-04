@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#faedcd"
     android:padding="16dp">
     <LinearLayout
         android:layout_width="match_parent"
@@ -94,6 +95,9 @@
         android:id="@+id/updateButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#ef6c00"
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:text="글 수정하기" />
 
 </LinearLayout>

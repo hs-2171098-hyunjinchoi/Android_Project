@@ -193,7 +193,7 @@ class HomeFragment : Fragment(){
             // 판매 상태(판매 완료, 판매중)에 따라 글자 색 변경
             if(productList[position].productStatus == true) {
                 viewHolder.productStatus.text = "판매 중"
-                viewHolder.productStatus.setTextColor(Color.GREEN)
+                viewHolder.productStatus.setTextColor(Color.parseColor("#0b6a3c"))
             }
             else {
                 viewHolder.productStatus.text = "판매 완료"
@@ -202,9 +202,9 @@ class HomeFragment : Fragment(){
 
             // 인덱스에 따라 배경색 설정
             if (position % 2 == 0) {
-                viewHolder.itemView.setBackgroundColor(Color.parseColor("#c8c7d7"))
+                viewHolder.itemView.setBackgroundColor(Color.parseColor("#ffe2ae"))
             } else {
-                viewHolder.itemView.setBackgroundColor(Color.parseColor("#edecf2"))
+                viewHolder.itemView.setBackgroundColor(Color.parseColor("#fbf1d5"))
             }
 
         }

@@ -151,7 +151,7 @@
         android:layout_marginTop="48dp"
         android:background="@drawable/brown_label"
         android:text="@string/create"
-        android:textSize="20dp"
+        android:textSize="30dp"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

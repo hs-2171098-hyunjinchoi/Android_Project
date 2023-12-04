@@ -27,7 +27,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
         android:background="@drawable/orang_label"
+        android:fontFamily="sans-serif-medium"
         android:text="@string/logout"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,9 +44,11 @@
         android:layout_marginStart="56dp"
         android:layout_marginTop="60dp"
         android:text="이름: "
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:textColor="#7e7e7e"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mypageLabel"
-         />
+        app:layout_constraintTop_toBottomOf="@+id/mypageLabel" />
 
     <TextView
         android:id="@+id/userEmailLabel"
@@ -51,6 +57,9 @@
         android:layout_marginStart="56dp"
         android:layout_marginTop="40dp"
         android:text="이메일: "
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:textColor="#7e7e7e"
         app:layout_constraintWidth_percent="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userNameLabel" />
@@ -62,6 +71,9 @@
         android:layout_marginStart="56dp"
         android:layout_marginTop="40dp"
         android:text="생년월일: "
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:textColor="#7e7e7e"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userEmailLabel" />
 
